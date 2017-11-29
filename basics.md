@@ -2,9 +2,6 @@
 ### Functor
 
 
-
-
-
 Functors are objects that can implement the map function. Examples for objects are collections, container or single values.
 Overall you can say if you can map the object, it is a functor.
 
@@ -24,7 +21,7 @@ val l2 = l1.map(x=>x+1)
 
 this makes it clearer that map is a higher order function on lists. Therefore is List[] a functor because you can map it.
 
-In Scala you can think of a functor as a trait. In the following definition represents F the functor:
+In Scala you can think of a functor as a trait. In the following pseudo-code represents F the functor:
 
 ```Scala
 trait F[A] {
@@ -41,4 +38,47 @@ After you apply map to it, the value will be unwrapped and the function will be 
 At least the value will be rewrapped back into the context ```F[B]```. 
 
 If you look at the first example, you have List l1 and after you map it you get l2 which is also a List and again a functor.
+
+
+###Monads
+
+Monads are derived from category theory in mathematics. They are commonly used in programming to mean higher order functions. 
+For this post it isn't necessary to have knowledge in category theory.
+
+Having a programming language like Scala where everything has to be immutable is often hard to intercat. Because in the real world everything changes the whole time. 
+They found something in monad which allows to explain it in the function contract. Everytime you call a function with the same argument you have to get same result in cause no side effects. But if you pass a function as parameter to a function you can get different results.
+
+Monads are like wrappers where you can wrap objects. It's like wrapping a present to make it look prettier and that's the same with monads. They are also allow us to handle asynchronous code which is very powerful.
+
+Recalling that a functor is a type which has a map method, a monad is a type of functor which implements the flatMap method. This can be written in a pseudo-code:
+
+```Scala
+trait M[A] {
+  def map(f: A => B): M[B]
+  def flatMap(f: A => M[B]): M[B]
+}
+```
+
+You have a class M with the type A, this would be written in M[A].
+If you want to flatten it you need to provide a function A -> M[B]. 
+FlatMap will transform A into M[B] and the result is M[M[B]]. After mapping, flatMap will flatten it and you get M[B].
+
+
+The following example shows how to map a function returning a list over the elements of a List:
+
+```Scala
+val l3 = l1.map { x => List(x-1, x+1) }
+l3: List[List[Int]] = List(List(0, 2), List(1, 3), List(2, 4))
+```
+
+This example returns a list of lists but this result looks a bit confusing. If you want to flatten it down to have only the list with the values in it you can use the operation flatMap:
+
+```Scala
+val l4 = l1.flatMap { x => List(x-1, x+1) }
+l4: List[Int] = List(0, 2, 1, 3, 2, 4)
+```
+
+Notice that not all functors can have a flattening operation, so not all functors are monads, but all monads are functors. Monads are therefore more powerful than functors.
+
+
 
