@@ -66,14 +66,14 @@ The following example shows how to map a function returning a list over the elem
 
 ```Scala
 val l3 = l1.map { x => List(x-1, x+1) }
-l3: List[List[Int]] = List(List(0, 2), List(1, 3), List(2, 4))
+//l3: List[List[Int]] = List(List(0, 2), List(1, 3), List(2, 4))
 ```
 
 This example returns a list of lists but this result looks a bit confusing. If you want to flatten it down to have only the list with the values in it you can use the operation flatMap:
 
 ```Scala
 val l4 = l1.flatMap { x => List(x-1, x+1) }
-l4: List[Int] = List(0, 2, 1, 3, 2, 4)
+//l4: List[Int] = List(0, 2, 1, 3, 2, 4)
 ```
 
 Notice that not all functors can have a flattening operation, so not all functors are monads, but all monads are functors. Monads are therefore more powerful than functors.
