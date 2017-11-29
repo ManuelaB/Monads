@@ -40,7 +40,7 @@ At least the value will be rewrapped back into the context ```F[B]```.
 If you look at the first example, you have List l1 and after you map it you get l2 which is also a List and again a functor.
 
 
-###Monads
+### Monads
 
 Monads are derived from category theory in mathematics. They are commonly used in programming to mean higher order functions. 
 For this post it isn't necessary to have knowledge in category theory.
@@ -59,9 +59,7 @@ trait M[A] {
 }
 ```
 
-You have a class M with the type A, this would be written in M[A].
-If you want to flatten it you need to provide a function A -> M[B]. 
-FlatMap will transform A into M[B] and the result is M[M[B]]. After mapping, flatMap will flatten it and you get M[B].
+You have a class M with the type A, this would be written in M[A]. If you want to flatten it you need to provide a function A -> M[B]. FlatMap will transform A into M[B] and the result is M[M[B]]. After mapping, flatMap will flatten it and you get M[B].
 
 
 The following example shows how to map a function returning a list over the elements of a List:
@@ -80,5 +78,14 @@ l4: List[Int] = List(0, 2, 1, 3, 2, 4)
 
 Notice that not all functors can have a flattening operation, so not all functors are monads, but all monads are functors. Monads are therefore more powerful than functors.
 
+The flatMap function doesn't require a function with A -> M[A]. If M is a List and A is a Int, Int -> List[String], this would also work, so it doesn’t have to be Int -> List[Int].
+
+```Scala
+
+val l5 = l1.flatMap(x=>List(x + "a"))
+//l5: List[String] = List(1a, 2a, 3a)
+```
+
+Therefore flatMap is more powerful then map because it will chain operations together. The map function is just a subset of flatMap.
 
 
