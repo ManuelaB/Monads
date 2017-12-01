@@ -1,4 +1,7 @@
 ## Scala Basics 
+
+In this blog we get to know more about monads. But first of all we have to define a functor because monad is a type of a functor.
+
 ### Functor
 
 
