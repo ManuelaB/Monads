@@ -1,6 +1,14 @@
 ## Scala Basics 
 
-In this blog we get to know more about monads. But first of all we have to define a functor because monad is a type of a functor.
+In this blog we get to know more about monads. 
+
+Monads are derived from category theory in mathematics. They are commonly used in programming to mean higher order functions. 
+For this post it isn't necessary to have knowledge in category theory.
+
+Having a programming language like Scala where everything has to be immutable is often hard to intercat. Because in the real world everything changes the whole time. 
+They found something in monad which allows to explain it in the function contract. Everytime you call a function with the same argument you have to get same result in cause no side effects. But if you pass a function as parameter to a function you can get different results.
+
+Before we get to know more about monads we have to define a functor because monad is a type of it.
 
 ### Functor
 
@@ -44,12 +52,6 @@ If you look at the first example, you have List l1 and after you map it you get 
 
 
 ### Monads
-
-Monads are derived from category theory in mathematics. They are commonly used in programming to mean higher order functions. 
-For this post it isn't necessary to have knowledge in category theory.
-
-Having a programming language like Scala where everything has to be immutable is often hard to intercat. Because in the real world everything changes the whole time. 
-They found something in monad which allows to explain it in the function contract. Everytime you call a function with the same argument you have to get same result in cause no side effects. But if you pass a function as parameter to a function you can get different results.
 
 Monads are like wrappers where you can wrap objects. It's like wrapping a present to make it look prettier and that's the same with monads. They are also allow us to handle asynchronous code which is very powerful.
 
