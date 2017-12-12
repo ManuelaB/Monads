@@ -94,3 +94,35 @@ val l5 = l1.flatMap(x=>List(x + "a"))
 Therefore flatMap is more powerful then map because it will chain operations together. The map function is just a subset of flatMap.
 
 
+### When do we need Monads?
+
+To get a better understanding why Moands are helpful, here is an example.
+
+Lets say you want to get the address from a user. These two methods will return a user and an address with the type Future. 
+
+```scala
+def getUser(name: String): Future[User] = ...
+
+def getAddress(user: User): Future[Address] = ...
+```
+
+As we mentioned before, Future is an asynchron computation and will return a value in some time later. It has also the flatMap method which you can use to transform the content and also write it as a for-comprehension.
+
+```scala
+val getCity: Future[String] =
+
+    getUser("Andreas").flatMap(
+        user => getAddress(user).map(
+            address => address.city))
+```
+
+
+```scala
+val getCity: Future[String] = 
+    for {
+        user        <- getUser("Andreas")
+        address     <- getAddress(user)
+    } yield address.city
+```
+
+The for-comprehension is much more easier to read
