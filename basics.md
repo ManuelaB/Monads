@@ -209,7 +209,7 @@ You double flatMap the two methods. First extracting from the Future and then fr
 This code example doesn't work in real live so you want something like a method which works on Future[Option[X]]. For this case you need a wrapper class.
 
 
-###Wrapper class
+### Wrapper class
 
 Let's go back to Functors and Monads. If you have two Functors A and B and you know how to map over A[X] and B[X] you also know how to map over A[B[X]].
 This is not possible for Monads. Knowing how to flatMap over A[X] and over B[X] doesn't grant you to flatMap over A[B[X]].
@@ -272,7 +272,7 @@ As you can see there is no knowledge about the 'outer' Monad (Future or List) re
 The library cats already provides a class OptionT which solves this problem.
 
 
-###OptionT
+### OptionT
 
 OptionT has two type parameters F and A: **OptionT[F, A].**
 F is the wrapping Moand and A is the type inside Option. OptionT[F, A] is a flat Version of F[Option[A]] which we had in our examples before. It is also Monad and has its own map and flatMap methods so you can use the for-comprehension.
