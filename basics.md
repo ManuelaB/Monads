@@ -206,7 +206,10 @@ You double flatMap the two methods. First extracting from the Future and then fr
 "Andreas" = User <------ Option["Andreas"] <------ Future[Option["Andreas"]]
 ```
 
-This code snippet doesn't work in real live so you want something like a method who works on Future[Option[X]].
+This code example doesn't work in real live so you want something like a method which works on Future[Option[X]]. For this case you need a wrapper class.
+
+
+###Wrapper class
 
 Let's go back to Functors and Monads. If you have two Functors A and B and you know how to map over A[X] and B[X] you also know how to map over A[B[X]].
 This is not possible for Monads. Knowing how to flatMap over A[X] and over B[X] doesn't grant you to flatMap over A[B[X]].
@@ -219,7 +222,6 @@ The first snippet shows again the definition of a Monad class and the second the
 trait M[A] {
     
 	def map(f: A => B): M[B] 
-	
 	def flatMap(f: A => M[B]): M[B] 
 }
 ```
@@ -230,10 +232,41 @@ case class FutOpt[A](value: Future[Option[A]]) {
     def map[B](f: A => B): FutOpt[B] = FutOpt(value.map(optA => optA.map(f)))
   
     def flatMap[B](f: A => FutOpt[B]): FutOpt[B] = 
-    
         FutOpt(value.flatMap(opt => opt match {
             case Some(a) => f(a).value
             case None => Future.successful(None)
         }))
 }
 ```
+
+Now we can try again to get the city from a user and running the code with the wrapper class. You just have to use the FutOpt in the for-comprehension and use .value to get the result.
+
+```scala
+val f: Future[Option[String]] =
+    for {
+        user    <- FutOpt(getUser("Andreas"))
+        address <- FutOpt(getAddress(user))
+    } yield address.city
+    
+    
+val getCity: Future[Option[String]] = f.value
+```
+
+The wrapper class also works for List[Option[A]].
+
+```scala
+case class ListOpt[A](value: List[Option[A]]) {
+ 
+    def map[B](f: A => B): ListOpt[B] = ListOpt(value.map(optA => optA.map(f)))
+ 
+    def flatMap[B](f: A => ListOpt[B]): ListOpt[B] =
+    
+        ListOpt(value.flatMap(opt => opt match {
+            case Some(a) => f(a).value
+            case None => List(None)
+        }))
+}
+```
+
+As you can see there is no knowledge about the 'outer' Monad (Future or List) required. The 'outer' Monad can be any type of structure as long as you can map or flatMap over it. You just need a knowledge about the 'inner' Monad, which is Option in this case. In general it's a generic data structure that wraps any Monad around an Option.
+
