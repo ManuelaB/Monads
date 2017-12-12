@@ -125,10 +125,7 @@ As we mentioned before, Future is an asynchron computation and will return a val
 
 ```scala
 val getCity: Future[String] =
-
-    getUser("Andreas").flatMap(
-        user => getAddress(user).map(
-            address => address.city))
+      getUser("Andreas").flatMap(user => getAddress(user).map(address => address.city))
 ```
 
 
@@ -141,5 +138,22 @@ val getCity: Future[String] =
 ```
 
 The code is now much more easier to read. First you get the user and pass it to the getAddress method. Once you have the address you will get the city of it.
+
+There are several problems which we didn't mention yet. It is possible that not every name corresponds to an existing user or the user has no address. For this reason you can use Option which serves this purpose. You just have to change the returntype of the two methods and the value ```getCity```.
+
+```scala
+def getUser(name: String): Future[Option[User]] = ... 
+
+def getAddress(user: User): Future[Option[Address]] = ...
+```
+
+```scala
+val getCity: Future[Option[String]] = 
+    for {
+        user        <- getUser("Andreas")
+        address     <- getAddress(user)
+    } yield address.city
+    
+```
 
 
