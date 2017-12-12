@@ -165,7 +165,7 @@ error: type mismatch;
            address <- getAddress(user)
 ```
 
-The getAddress method need the type User but getUser hands over an Option[User].
+The getAddress method needs the type User but getUser hands over an Option[User]. In the follwing example you can see the procedure of unwrapping the values. The first extraction works easily but second where you hand over the value user is failing. 
 
 ```scala
 user    <- getUser("Andreas")   <=>   Option[User] <- Future[Option[User]] 
