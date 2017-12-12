@@ -279,7 +279,7 @@ F is the wrapping Moand and A is the type inside Option. OptionT[F, A] is a flat
 
 In general you can say: **Foo[Bar[X]] becomes BarT[Foo, X]**
 
-To use the OptionT you have to import the cats library. The value ```f``` need to have the return type OptionT and in the for-comprehension OptionT it will extract the user and the address. With ```.value``` you can get the 
+To use the OptionT you have to import the cats library. The value ```f``` need to have the return type OptionT and in the for-comprehension OptionT it will extract the user and the address. With ```.value``` you can get the result.
 
 ```scala
 import cats.data.OptionT
@@ -297,4 +297,14 @@ val f: OptionT[Future, String] =
 
 ```scala
 val getCity: Future[Option[String]] = f.value
+```
+
+For OptionT the return type has to be Future[Option[X]]. If you have methods with another return type like Option[String] or Future[Int] it doesn't work.
+
+The code could also be written a bit nicer from the beginning when you know you wrapping more often. The methods could return OptionT directly.
+
+```scala
+def getUser(name: String): OptionT[Future, User] = OptionT { ... }
+
+def getAddress(user: User): OptionT[Future, Address] = OptionT{ ... }
 ```
