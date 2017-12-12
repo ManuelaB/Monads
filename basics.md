@@ -283,18 +283,15 @@ To use the OptionT you have to import the cats library. The value ```f``` need t
 ```scala
 import cats.data.OptionT
 import cats.std.future._
- ```
- 
- 
- ```scala
+
+
 val f: OptionT[Future, String] =
     for {
         user    <- OptionT(getUser("Andreas"))
         address <- OptionT(getAddress(user))
     } yield address.city
-```
 
-```scala
+
 val getCity: Future[Option[String]] = f.value
 ```
 
@@ -304,18 +301,15 @@ The code could also be written a bit nicer from the beginning when you know you 
 
 ```scala
 def getUser(name: String): OptionT[Future, User] = OptionT { ... }
-
 def getAddress(user: User): OptionT[Future, Address] = OptionT{ ... }
-```
 
-```scala
+
 val f: OptionT[Future, String] =
     for {
         user <- getUser("Andreas")
         address <- getAddress(user)
     } yield address.city
-```
-    
-```scala
+
+
 val getCity: OptionT[Future, String] = f.value
 ```
