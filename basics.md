@@ -93,7 +93,7 @@ val l5 = l1.flatMap(x=>List(x + "a"))
 
 Therefore flatMap is more powerful then map because it will chain operations together. The map function is just a subset of flatMap.
 
-The synthetic sugar of a flatMap method is to write it as a for-comprehension. Notice that it is not comparable with a for-loop. The symbol <- stands for the flatMap operation.
+The synthetic sugar of a flatMap method is to write it as a for-comprehension with the symbol ```<-```. Notice that it is not comparable with a for-loop.
 
 ```Scala
 l1.flatMap(x => l2.map(y => x + y ) )
@@ -105,6 +105,8 @@ for {
 } yield first + second
 //res1: List[Int] = List(3, 4, 5, 4, 5, 6, 5, 6, 7)
 ```
+
+As you can see, the for-comprehension is much more readable then using the flatMap method.
 
 
 ### When do we need Monads?
@@ -138,4 +140,6 @@ val getCity: Future[String] =
     } yield address.city
 ```
 
-The for-comprehension is much more easier to read
+The code is now much more easier to read. First you get the user and pass it to the getAddress method. Once you have the address you will get the city of it.
+
+
