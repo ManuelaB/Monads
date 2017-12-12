@@ -220,7 +220,6 @@ The first snippet shows again the definition of a Monad class and the second the
 
 ```scala
 trait M[A] {
-    
 	def map(f: A => B): M[B] 
 	def flatMap(f: A => M[B]): M[B] 
 }
@@ -307,4 +306,16 @@ The code could also be written a bit nicer from the beginning when you know you 
 def getUser(name: String): OptionT[Future, User] = OptionT { ... }
 
 def getAddress(user: User): OptionT[Future, Address] = OptionT{ ... }
+```
+
+```scala
+val f: OptionT[Future, String] =
+    for {
+        user <- getUser("Andreas")
+        address <- getAddress(user)
+    } yield address.city
+```
+    
+```scala
+val getCity: OptionT[Future, String] = f.value
 ```
