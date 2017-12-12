@@ -279,4 +279,22 @@ F is the wrapping Moand and A is the type inside Option. OptionT[F, A] is a flat
 
 In general you can say: **Foo[Bar[X]] becomes BarT[Foo, X]**
 
-To implement the OptionT you have to import
+To use the OptionT you have to import the cats library. The value ```f``` need to have the return type OptionT and in the for-comprehension OptionT it will extract the user and the address. With ```.value``` you can get the 
+
+```scala
+import cats.data.OptionT
+import cats.std.future._
+ ```
+ 
+ 
+ ```scala
+val f: OptionT[Future, String] =
+    for {
+        user    <- OptionT(getUser("Andreas"))
+        address <- OptionT(getAddress(user))
+    } yield address.city
+```
+
+```scala
+val getCity: Future[Option[String]] = f.value
+```
