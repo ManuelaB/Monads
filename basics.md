@@ -197,7 +197,7 @@ def city: Future[Option[String]] =
   } yield address.city
 ```    
 
-You double flatMap the methods. First extracting from the Future and then from the Option that you get just the user.
+You double flatMap the two methods. First extracting from the Future and then from the Option that you get just the user.
 
 ```scala
         user        <-       maybeUser       <-       getUser("Andreas")
@@ -206,3 +206,34 @@ You double flatMap the methods. First extracting from the Future and then from t
 "Andreas" = User <------ Option["Andreas"] <------ Future[Option["Andreas"]]
 ```
 
+This code snippet doesn't work in real live so you want something like a method who works on Future[Option[X]].
+
+Let's go back to Functors and Monads. If you have two Functors A and B and you know how to map over A[X] and B[X] you also know how to map over A[B[X]].
+This is not possible for Monads. Knowing how to flatMap over A[X] and over B[X] doesn't grant you to flatMap over A[B[X]].
+
+Therefore you have to write a wrapper class that works for Future[Option[A]] with its own map and flatMap methods.
+
+The first snippet shows again the definition of a Monad class and the second the wrapper class.
+
+```scala
+trait M[A] {
+    
+	def map(f: A => B): M[B] 
+	
+	def flatMap(f: A => M[B]): M[B] 
+}
+```
+
+```scala
+case class FutOpt[A](value: Future[Option[A]]) {
+ 
+    def map[B](f: A => B): FutOpt[B] = FutOpt(value.map(optA => optA.map(f)))
+  
+    def flatMap[B](f: A => FutOpt[B]): FutOpt[B] = 
+    
+        FutOpt(value.flatMap(opt => opt match {
+            case Some(a) => f(a).value
+            case None => Future.successful(None)
+        }))
+}
+```
