@@ -156,4 +156,21 @@ val getCity: Future[Option[String]] =
     
 ```
 
+There is another problem because it doesn't compile any more.
+
+```scala
+error: type mismatch;
+ found   : Option[User]
+ required: User
+           address <- getAddress(user)
+```
+
+The getAddress method need the type User but getUser hands over an Option[User].
+
+```scala
+user    <- getUser("Andreas")   <=>   Option[User] <- Future[Option[User]] 
+
+address <- getAddress(user)     <=>   address <- getAddress(Option[User]) //ERROR            
+```
+
 
