@@ -93,6 +93,19 @@ val l5 = l1.flatMap(x=>List(x + "a"))
 
 Therefore flatMap is more powerful then map because it will chain operations together. The map function is just a subset of flatMap.
 
+The synthetic sugar of a flatMap method is to write it as a for-comprehension. Notice that it is not comparable with a for-loop. The symbol <- stands for the flatMap operation.
+
+```Scala
+l1.flatMap(x => l2.map(y => x + y ) )
+//res0: List[Int] = List(3, 4, 5, 4, 5, 6, 5, 6, 7)
+
+for {
+    first <- l1
+    second <- l2
+} yield first + second
+//res1: List[Int] = List(3, 4, 5, 4, 5, 6, 5, 6, 7)
+```
+
 
 ### When do we need Monads?
 
