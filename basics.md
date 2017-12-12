@@ -252,7 +252,7 @@ val f: Future[Option[String]] =
 val getCity: Future[Option[String]] = f.value
 ```
 
-The wrapper class also works for List[Option[A]].
+The wrapper class also works for List[Option[A]]:
 
 ```scala
 case class ListOpt[A](value: List[Option[A]]) {
