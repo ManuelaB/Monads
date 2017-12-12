@@ -199,9 +199,8 @@ def city: Future[Option[String]] =
 
 You double flatMap the two methods. First extracting from the Future and then from the Option that you get just the user.
 
-```scala
+```
         user        <-       maybeUser       <-       getUser("Andreas")
-
 
 "Andreas" = User <------ Option["Andreas"] <------ Future[Option["Andreas"]]
 ```
