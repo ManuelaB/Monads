@@ -260,7 +260,6 @@ case class ListOpt[A](value: List[Option[A]]) {
     def map[B](f: A => B): ListOpt[B] = ListOpt(value.map(optA => optA.map(f)))
  
     def flatMap[B](f: A => ListOpt[B]): ListOpt[B] =
-    
         ListOpt(value.flatMap(opt => opt match {
             case Some(a) => f(a).value
             case None => List(None)
@@ -270,3 +269,14 @@ case class ListOpt[A](value: List[Option[A]]) {
 
 As you can see there is no knowledge about the 'outer' Monad (Future or List) required. The 'outer' Monad can be any type of structure as long as you can map or flatMap over it. You just need a knowledge about the 'inner' Monad, which is Option in this case. In general it's a generic data structure that wraps any Monad around an Option.
 
+The library cats already provides a class OptionT which solves this problem.
+
+
+###OptionT
+
+OptionT has two type parameters F and A: **OptionT[F, A].**
+F is the wrapping Moand and A is the type inside Option. OptionT[F, A] is a flat Version of F[Option[A]] which we had in our examples before. It is also Monad and has its own map and flatMap methods so you can use the for-comprehension.
+
+In general you can say: **Foo[Bar[X]] becomes BarT[Foo, X]**
+
+To implement the OptionT you have to import
