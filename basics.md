@@ -173,4 +173,28 @@ user    <- getUser("Andreas")   <=>   Option[User] <- Future[Option[User]]
 address <- getAddress(user)     <=>   address <- getAddress(Option[User]) //ERROR            
 ```
 
+Now you try to solve the problem by writing something like this:
 
+```scala
+val getCity: Future[Option[String]] = 
+    for {
+        maybeUser  <- getUser("Andreas")
+        maybeCity  <- maybeUser match{
+            case Some(user) => getAddress(user).map(_.map(_.city))
+            case None => Future.successful(Node)
+        }
+    } yield maybeCity
+```
+
+This code doesn't look good so you ideally want to write it more readable:
+
+```scala
+def city: Future[Option[String]] =
+
+  for {
+    user    <- maybeUser    <- getUser("Andreas")
+    address <- maybeAddress <- getAddress(user)
+  } yield address.city
+```    
+
+You double flatMap the 
